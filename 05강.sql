@@ -41,6 +41,7 @@ where orderdate >= '2021-02-01' and orderdate <='2021-02-09';
 
 
 
+
 -- 여러 연산자에 따른 결과
 -- 도서번호가 3,4,5,6인 주문 목록을 출력
 select *
@@ -72,7 +73,8 @@ where username like '박%';           -- 박으로만 시작하고 뒤에 뭐가
 -- 2번째 글자가 '지'인 고객을 출력하시오.
 select username
 from customer
-where username like '_지%';
+where username like '_지%';         -- _는 글자수 1개를 지정함.
+
 
 
 
@@ -132,10 +134,11 @@ from book
 where bookid=11;
 
 
+
 -- null인 레코드를 찾아보자. (is 비교 연산자 사용)
 select *
 from book
-where price is null;            -- 꼭 지정을 해줘야 찾을 수 있음. 전체 다 찾으려고 * 하면 오류.
+where price is null;            -- null값이 있는지 궁금한 컬럼을 꼭 지정해줘야 찾을 수 있음. 전체 다 찾으려고 * 하면 오류.
 
 
 
@@ -158,6 +161,11 @@ from book
 where bookid < 11;
 
 
--- ifnull() 내장함수                                                   -- null인 경우에 null을 대체하는 값을 지정하여, 새로운 컬럼들로 이루어진 데이터를 만들 수 있음.
+-- ifnull() 내장함수                                                   -- null인 경우에 null을 대체하는 값을 지정하여, 새로운 값들로 이루어진 데이터를 만들 수 있음.
 select username as '이름', ifnull(phone, '연락처 없음') '전화번호'         -- username의 컬럼이름을 '이름'으로, phone의 컬럼이름을 '전화번호'로 바꿈. (select해서 나오는 컬럼에 as 별칭주기.)
 from customer;
+
+
+select username as '이름2', phone as '전화번호2' from customer;        -- as는 생략 가능
+
+select ifnull(phone, '연락처 없엉') from customer;

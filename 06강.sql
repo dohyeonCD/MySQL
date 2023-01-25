@@ -2,10 +2,12 @@
 정렬(order by)
 ======================*/
 
+use bookstore;
+
 -- 도서를 이름순으로 검색하시오.
 select *
 from book
-order by bookname;                 -- 해당 컬럼을 오름/내림으로 정렬. (오름- asc, 내림- desc)
+order by bookname;                 -- 해당 컬럼을 오름/내림으로 정렬. (오름- asc, 내림- desc). 기본은 오름.
 
 
 -- 도서를 가격순으로 검색하고, 가격이 같으면 이름순으로 검색
@@ -54,7 +56,7 @@ order by 2, 3;                         -- 2번컬럼 bookname먼저 정렬하고
 ======================*/
 
 -- 주문 고객목록
-select distinct custid from orders;                          -- orders 테이블에 있는 custid를 중복을 배제하고 정렬. 
+select distinct custid from orders;                          -- orders 테이블에 있는 custid를 중복을 배제하고 출력. 
 
 
 -- 판매가격 목록
@@ -73,22 +75,21 @@ select count(distinct custid) from orders;
 
 
 
-
 /*======================
 조건 제어(if, case)
 ======================*/
 
 -- if
-select if(100>200, '참', '거짓');                        -- 조건식이 참이면 순서대로 '참', 거짓이면 '거짓' 출력. (조건식, 참일 때 출력, 거짓일 때 출력)
+select if(100>200, '참', '거짓');                              -- 조건식이 참이면 순서대로 '참', 거짓이면 '거짓' 출력. (조건식, 참일 때 출력, 거짓일 때 출력)
 
 
 -- 다중조건 case
 -- 판매금액에 따라 고객등급을 출력하시오. 
-select custid, sum(saleprice) as '총구매액',              -- custid의 saleprice의 합계를 구하여 '총구매액' 컬럼을 만든다~    변수같은 거 안됨ㅋㅋㅋ
+select custid, sum(saleprice) as '총구매액',              -- custid의 saleprice의 합계를 구하여 '총구매액' 컬럼을 만든다~
 case
-when (sum(saleprice) >=60000) then '최우수고객'
+when (sum(saleprice) >=60000) then '최우수고객'  -- when절의 조건문을 ()로 묶지 않아도 실행이 되기는 함. 근데 웬만하면 묶어주자~ 길어지면 헷갈릴듯.
 when (sum(saleprice) >=40000) then '우수고객'
 when (sum(saleprice) >=20000) then '일반고객'
 else '유령고객'
-end as '고객등급'
-from orders group by custid;                            -- orders에서 custid로 그룹핑을 한 걸로 구분지어~
+end as '고객등급'                                                    -- case로 조건 제어한 컬럼의 이름을 지정(as는 생략 가능)
+from orders group by custid;                                  -- orders에서 custid로 그룹핑을 한 걸로 구분지어~

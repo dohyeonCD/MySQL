@@ -1,12 +1,12 @@
--- unsafe update 호출
+-- unsafe update 호출 (booklibrary 테이블 안에 있는 bookname이 모두 '대한민국 부산'으로 바뀔 위험이 있음)
 update booklibrary
 set    bookname='대한민국 부산';
 
--- 1. unsafe 해제 -> 업데이트 구문 + 조건절을 설정 (광범위하게~. 서버가 시작하는 시점부터 해제시키는 방법.)   2. 무조건 조건절(where) 사용.(사용할 때마다)
+
+-- unsafe 해제
+-- 1. 업데이트 구문 + 조건절을 설정 (광범위하게~. 서버가 시작하는 시점부터 해제시키는 방법.)   
+-- 2. 무조건 조건절(where) 사용.(사용할 때마다)
 set sql_safe_updates=0;
-
-update booklibrary
-set    bookname='대한민국 부산';
 
 
 update booklibrary
@@ -14,27 +14,11 @@ set    bookname='대한민국 부산'
 where  custid=5;               -- 조건절 다는 게 안전하긴 함.
 
 
--- bookstore 데이터베이스 생성
--- 샘플 데이터 삽입
--- demo_bookstore.sql
 
 
+--  root 계정으로 접속-> bookstore 데이터베이스 생성-> 샘플 데이터 삽입
 
-
-/* 이름: demo_bookstore.sql */
-/* 설명 */
- 
-/* root 계정으로 접속, bookstore 데이터베이스 생성, user1 계정 생성 */
-/* MySQL Workbench에서 초기화면에서 +를 눌러 root connection을 만들어 접속한다. */
--- DROP DATABASE IF EXISTS  bookstore;
--- DROP USER IF EXISTS  user1@localhost;
-
--- create user user1@localhost identified WITH mysql_native_password  by '012345';
--- create database bookstore;
--- grant all privileges on user1.* to user1@localhost with grant option;
--- commit;
-
-/* 자료 생성 */
+-- 자료 생성
  
 USE bookstore;
 
@@ -52,6 +36,8 @@ CREATE TABLE  Customer (
   phone       VARCHAR(20)
 );
 
+
+
 CREATE TABLE Orders (
   orderid INTEGER PRIMARY KEY,
   custid  INTEGER ,
@@ -63,12 +49,13 @@ CREATE TABLE Orders (
 );
 
 
--- insert bulk 대량의 데이터를 삽입하는 것. 
 
 
-INSERT INTO Book VALUES(1, '철학의 역사', '정론사', 7500);      -- insert into 다음에 있는 해당테이블에 values 값들이 삽입. 컬럼의 순서대로 자동으로 입력됨.
--- INSERT INTO Book(bookid, bookname) VALUES(1, '철학의 역사')        -- 해당하는 컬럼에만 넣고 싶을 때는 이런 방식으로. 
+-- insert bulk. 대량의 데이터를 삽입하는 것. 
 
+
+INSERT INTO Book VALUES(1, '철학의 역사', '정론사', 7500);                  -- insert into 다음의 해당테이블에 values 값들이 삽입. 컬럼의 순서대로 자동으로 입력됨.
+-- INSERT INTO Book(bookid, bookname) VALUES(1, '철학의 역사')        -- 해당하는 컬럼에만 값을 넣고 싶을 때는 이런 방식으로. 
 
 
 INSERT INTO Book VALUES(2, '3D 모델링 시작하기', '한비사', 15000);
@@ -88,7 +75,7 @@ INSERT INTO Customer VALUES (4, '추신수', '대한민국 부산', '010-8000-87
 INSERT INTO Customer VALUES (5, '박세리', '대한민국 대전',  NULL);
 
 
-INSERT INTO Orders VALUES (1, 1, 1, 7500, STR_TO_DATE('2021-02-01','%Y-%m-%d')); 
+INSERT INTO Orders VALUES (1, 1, 1, 7500, STR_TO_DATE('2021-02-01','%Y-%m-%d'));        -- 날짜는 무조건 '-'로 구분됨. 연도는 Y 대문자로.
 INSERT INTO Orders VALUES (2, 1, 3, 44000, STR_TO_DATE('2021-02-03','%Y-%m-%d'));
 INSERT INTO Orders VALUES (3, 2, 5, 8000, STR_TO_DATE('2021-02-03','%Y-%m-%d')); 
 INSERT INTO Orders VALUES (4, 3, 6, 8000, STR_TO_DATE('2021-02-04','%Y-%m-%d')); 

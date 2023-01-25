@@ -38,7 +38,7 @@ having max(price) < (select avg(price) from product);           -- having 구문
 
 
 
--- inline view (view는 임시 테이블 역할. 서브쿼리 결과를 from에 사용.)
+-- inline view (as 로 지정-> view는 임시 테이블 역할. 서브쿼리 결과를 from에 사용.)
 -- 가격이 2000원 이상인 제품들 중에 최고가를 구하시오.
 select max(price)
 from (select * from product 
@@ -55,7 +55,7 @@ where price > 2000;
 
 
 -- safe updates
-set sql_safe_updates=0;               -- safe_updates 옵션 해제.
+set sql_safe_updates=0;                    -- safe_updates 옵션 해제.
 update product set price=3000;        -- 모든 price를 3000으로 지정하려고 함. 이런 실수를 막아주는 게 safe_updates. 
 
 
@@ -71,12 +71,7 @@ use bookstore;
 
 -- 출판사별로 출판사의 평균 도서 가격보다 비싼 도서를 구하시오. (평균이어서 1개씩 있는 출판사는 출력되지 않음.)
 select * from book b1
-where b1.price > (select avg(b2.price) 
-                  from book b2 
-                  where b1.publisher = b2.publisher);       -- where을 안 해주면, 모든 price의 평균 구함-> 잘못된 결과 추출됨.
-                                                            -- where 조건을 넣으면 평균을 구한 b2를 복사본 b1의 publisher끼리 같도록 하여, 
-                                                            -- b1의 모든 publisher의 평균(b2)을 구하는 것. 
-
-
-select publisher, price from book group by publisher        -- group by를 하면 publisher의 도서들을 최소값으로 그룹핑을 함...(오름차순때문인가..?)
-having price > (select avg(price) from book);               -- 모든 price의 평균 구함-> 평균가를 넘는 도서들 중 출판사별로 제일 싼 도서를 추출...
+where b1.price > (select avg(b2.price) from book b2 
+                            where b1.publisher = b2.publisher);       -- where을 안 해주면, 모든 price의 평균 구함-> 잘못된 결과 추출됨.
+																						  -- where 조건을 넣어서 출판사별 평균가격(b2)을 b1의 출판사 정보와 비교 후
+                                                                                          -- 출판사의 평균 도서 가격보다 비싼 도서를 b1에서 추출.
