@@ -54,15 +54,15 @@ rollup을 이용한 소계(한 부분의 합계)
  
  
 -- 지역별로 판매된 도서의 수량을 조회하자.
-select address '주소', bookname '도서명', count(saleprice) '수량'
-from customer c, book b, orders o
-where c.custid = o.custid and b.bookid = o.bookid
-group by address with rollup;                         -- (그냥 group by c.address와 차이점: null 값 포함, 자동 ㄱㄴㄷ순 정렬)
+select address '지역', count(saleprice) '판매 수량'
+from customer c, orders o
+where c.custid = o.custid
+group by address with rollup;                         -- (그냥 group by address와 차이점: null 값 포함, 자동 ㄱㄴㄷ순 정렬)
 
 
 -- having 그룹컬럼 is not null (null 값 제외됨.)
-select address '주소', bookname '도서명', count(saleprice) '수량'
-from customer c, book b, orders o
-where c.custid = o.custid and b.bookid = o.bookid
+select address '지역', count(saleprice) '판매 수량'
+from customer c, orders o
+where c.custid = o.custid
 group by address with rollup
 having address is not null;
