@@ -91,7 +91,7 @@ case dayofweek(orderdate)                 -- case로 조건 제어..?
      when 5 then '목'
      when 6 then '금'
      when 7 then '토'
-     end '요일',
+end '요일',
 count(orderid) '수량'
 from orders
 group by 요일;                           -- 컬럼이름으로 해도 됨. ''따옴표는 빼고. 
