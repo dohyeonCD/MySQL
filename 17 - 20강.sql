@@ -24,7 +24,7 @@ where last_name like '%son';
 
 -- 배우들이 출연한 영화
 select lower(concat(first_name, ' ', last_name)) '배우',
-	   group_concat(f.title separator ',') '제목'
+	group_concat(f.title separator ',') '제목'
 from actor a, film f, film_actor fa
 where a.actor_id = fa.actor_id and f.film_id = fa.film_id
 group by 1;
@@ -62,7 +62,7 @@ left join address a on s.address_id = a.address_id;         -- 왼쪽을 메인�
 
 -- staff들 임금 비교하기 (2005년 7월)
 select concat(first_name, ' ', last_name) 'staff',
-	   sum(amount) 'payment'
+	sum(amount) 'payment'
 from staff s
 left join payment p on s.staff_id = p.staff_id
 where year(payment_date) = 2005 and month(payment_date) = 7
@@ -81,7 +81,7 @@ group by 1;
 
 -- 특정영화에 출연한 배우들(love)
 select title '영화',
-	   group_concat(concat(first_name, ' ', last_name) separator ',') '배우'
+	group_concat(concat(first_name, ' ', last_name) separator ',') '배우'
 from film f, actor a, film_actor fa
 where f.film_id = fa.film_id and a.actor_id = fa.actor_id and title like '%love%'
 group by 1;
@@ -89,7 +89,7 @@ group by 1;
 
 -- indian love에 출연한 배우들
 select title '영화',
-	   group_concat(concat(first_name, ' ', last_name) separator ',') '배우'
+	group_concat(concat(first_name, ' ', last_name) separator ',') '배우'
 from film f, actor a, film_actor fa
 where f.film_id = fa.film_id and a.actor_id = fa.actor_id and lower(title) = 'indian love'
 group by 1;
@@ -97,7 +97,7 @@ group by 1;
 
 -- join 사용해보기. (join 연속해서 쓸 수 있음. join의 on을 다 만족한 다음 where을 가기때문에, 같은 결과라면 on으로 끝내는 게 낫다고 함(where과 on 굳이 같이 쓰지 않기))
 select title '영화',
-	   group_concat(concat(first_name, ' ', last_name) separator ',') '배우'
+	group_concat(concat(first_name, ' ', last_name) separator ',') '배우'
 from film_actor fa
 join film f on f.film_id = fa.film_id
 join actor a on a.actor_id = fa.actor_id and lower(title) = 'indian love';
@@ -121,7 +121,7 @@ where address_id in (select address_id from address
 
 -- (where 조건절로 잇기)
 select country '국가',
-	   group_concat(concat(first_name, ' ', last_name) separator ',') '고객명'
+	group_concat(concat(first_name, ' ', last_name) separator ',') '고객명'
 from customer cu, address ad, city ci, country co
 where lower(country) = 'canada' and co.country_id = ci.country_id and ci.city_id = ad.city_id and ad.address_id = cu.address_id
 group by 1;
@@ -131,7 +131,7 @@ group by 1;
 
 -- 2. join
 select country '영화',
-	   group_concat(concat(first_name, ' ', last_name) separator ',') '고객명'
+	group_concat(concat(first_name, ' ', last_name) separator ',') '고객명'
 from customer cu
 join address ad on cu.address_id = ad.address_id
 join city ci on ad.city_id = ci.city_id
@@ -150,7 +150,7 @@ select rating from film group by rating;
 
 -- pg 또는 g 등급의 영화 수와 제목
 select rating '등급',
-	   count(*) '영화 수',
+	count(*) '영화 수',
        group_concat(title separator ',') '영화 제목'
 from film
 where lower(rating) = 'pg' or lower(rating) = 'g'               -- rating 생략하지 말기~
@@ -165,7 +165,7 @@ select distinct rental_rate from film;
 
 -- 대여비가 1 ~ 6 이하인 영화 제목과 등급
 select title '영화 제목',
-	   rating '등급',
+	rating '등급',
        rental_rate '대여비'
 from film
 where rental_rate between 1 and 6;
@@ -205,9 +205,9 @@ order by 3;
 
 -- 등급별 영화 수 랭킹 (기본은 asc 오름차순)
 select rating '등급',
-	   count(*) '영화 수',
+	count(*) '영화 수',
        rank () over (order by count(*) desc) '랭킹(rank)',
-	   dense_rank () over (order by count(*) desc) '랭킹(dense)',
+	dense_rank () over (order by count(*) desc) '랭킹(dense)',
        row_number() over (order by count(*) desc) '랭킹(row)'
 from film
 group by 1;
@@ -215,8 +215,8 @@ group by 1;
 
 -- 대여비가 가장 높은 영화 등급별 분류
 select rental_rate '대여비',
-	   rating '등급',
-	   group_concat(title order by title separator ',') '영화',
+	rating '등급',
+	group_concat(title order by title separator ',') '영화',
        count(*) '영화 수'
 from film
 where rental_rate in (select max(rental_rate) from film)
@@ -225,7 +225,7 @@ group by 2;
        
 -- 등급, 대여비별로 구분하여 영화 수가 많은 순으로 랭킹화.
 select rating '등급',
-	   count(*) '영화 수',
+	count(*) '영화 수',
        rental_rate '대여비',
        dense_rank () over (partition by rating order by count(*) desc) '랭킹(dense)'      -- partition by를 지정해야 등급별로 순위를 나눔. order by 순위를 매길 기준 
 from film
