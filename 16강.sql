@@ -57,7 +57,7 @@ rollup을 이용한 소계(한 부분의 합계)
 select address '지역', count(saleprice) '판매 수량'
 from customer c, orders o
 where c.custid = o.custid
-group by address with rollup;                         -- (그냥 group by address와 차이점: null 값 포함, 자동 ㄱㄴㄷ순 정렬)
+group by 1 with rollup;                         -- (그냥 group by address와 차이점: null 추가-> null로 소계를 나타냄(16), 자동 ㄱㄴㄷ순 정렬)
 
 
 -- having 그룹컬럼 is not null (null 값 제외됨.)

@@ -6,7 +6,7 @@
 select username '고객명',
 	   count(saleprice) '주문횟수',
        format(sum(saleprice),0) '합계',                         -- sum은 정수였지만, 0(정수)을 지정해주면 쉼표(,)가 생김.
-       format(avg(saleprice),1) '평균',                         -- format (x,d) x형식의 문자열~을 소수점 d자리수로 맞춘다. 날짜 형식으로도 가능.
+       format(avg(saleprice),1) '평균',                         -- format (x,d) x형식의 문자열~을 소수점 d자리수로 맞춘다(반올림O). 날짜 형식으로도 가능.
        min(saleprice) '최소 구매액',
        max(saleprice) '최대 구매액'
 from customer c
